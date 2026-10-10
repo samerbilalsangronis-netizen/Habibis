@@ -9,8 +9,9 @@ import Price from './Price';
 import ProductCard, { productSoldOut } from './ProductCard';
 import ProductSheet, { validateSelection } from './ProductSheet';
 import FloatingSocial from './FloatingSocial';
+import Hero from './Hero';
 import Sheet from '@/components/ui/Sheet';
-import { IconBike, IconCart, IconClock, IconPin, IconRepeat, IconSearch, IconStore, IconX } from '@/components/ui/Icons';
+import { IconCart, IconRepeat, IconSearch, IconX } from '@/components/ui/Icons';
 import { isOpenNow, nextOpeningText } from '@/lib/hours';
 import { useHydrated } from '@/lib/hooks';
 import { supabaseBrowser } from '@/lib/supabase/client';
@@ -40,6 +41,11 @@ export default function MenuView({ data }: { data: MenuData }) {
 
   const canOrder = open || (settings.allow_scheduled && settings.allow_scheduled_when_closed);
   const allProducts = useMemo(() => categories.flatMap((c) => c.products), [categories]);
+  const favorites = useMemo(() => {
+    const fav = allProducts.filter((p) => p.tags.includes('mas_pedido'));
+    const extra = allProducts.filter((p) => !fav.includes(p) && p.tags.includes('nuevo'));
+    return [...fav, ...extra].slice(0, 8);
+  }, [allProducts]);
   const productById = useMemo(() => new Map(allProducts.map((p) => [p.id, p])), [allProducts]);
   const count = lines.reduce((s, l) => s + l.quantity, 0);
   const subtotal = lines.reduce((s, l) => s + lineTotal(l), 0);
@@ -209,66 +215,18 @@ export default function MenuView({ data }: { data: MenuData }) {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 pb-36">
-        {/* Portada */}
-        <section className="pt-8 pb-6 text-center">
-          <img
-            src={settings.logo_url || '/logo.svg'}
-            alt={settings.business_name}
-            className="mx-auto w-24 h-24 rounded-3xl shadow-glow object-cover"
-          />
-          <h1 className="mt-4 font-display text-4xl sm:text-5xl text-gold-300">{settings.business_name}</h1>
-          {settings.tagline && <p className="mt-1 text-sand-200">{settings.tagline}</p>}
-          <div className="mt-4 flex items-center justify-center gap-2 flex-wrap">
-            <span
-              className={`chip text-xs px-3 py-1.5 ${
-                open ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40' : 'bg-red-500/15 text-red-300 border border-red-500/40'
-              }`}
-            >
-              <span className={`w-2 h-2 rounded-full ${open ? 'bg-emerald-400 animate-pulse2' : 'bg-red-400'}`} />
-              {open ? 'Abierto ahora' : 'Cerrado'}
-            </span>
-            {next && <span className="text-xs text-sand-400">{next}</span>}
-          </div>
-          <div className="mt-4 flex justify-center gap-4 text-xs text-sand-400 flex-wrap">
-            <span className="inline-flex items-center gap-1">
-              <IconClock className="w-4 h-4" /> {settings.prep_time_min}–{settings.prep_time_min + settings.delivery_time_min} min
-            </span>
-            {settings.delivery_enabled && (
-              <span className="inline-flex items-center gap-1">
-                <IconBike className="w-4 h-4" />
-                {settings.delivery_mode === 'flat' ? (
-                  <>
-                    Delivery <Price cop={settings.delivery_fee_cop} rates={rate} />
-                  </>
-                ) : (
-                  'Delivery por zonas'
-                )}
-              </span>
-            )}
-            {settings.pickup_enabled && (
-              <span className="inline-flex items-center gap-1">
-                <IconStore className="w-4 h-4" /> Retiro en local
-              </span>
-            )}
-            {settings.address && (
-              <span className="inline-flex items-center gap-1">
-                <IconPin className="w-4 h-4" /> {settings.address}
-                {settings.city ? `, ${settings.city}` : ''}
-              </span>
-            )}
-          </div>
-          <a href={`#cat-${categories[0]?.id ?? ''}`} className="btn-terra mt-6 px-8 text-base shadow-lg shadow-terra-500/20">
-            {open ? 'Pedir ahora' : canOrder ? 'Programar pedido' : 'Ver menú'}
-          </a>
-          {!open && (
-            <p className="mt-3 text-sm text-sand-400">
-              {canOrder
-                ? 'Estamos cerrados, pero puedes dejar tu pedido programado para cuando abramos.'
-                : 'Estamos cerrados. Puedes ver el menú; los pedidos se reciben en horario de atención.'}
-            </p>
-          )}
-          {!rateOk && <p className="mt-2 text-xs text-sand-500">Precios en COP. Las tasas del día aún no están cargadas.</p>}
-        </section>
+        <Hero
+          settings={settings}
+          hours={hours}
+          rate={rate}
+          open={open}
+          canOrder={canOrder}
+          next={next}
+          firstCategoryId={categories[0]?.id ?? ''}
+          favorites={favorites}
+          onOpenProduct={openProduct}
+        />
+        {!rateOk && <p className="-mt-4 mb-4 text-xs text-sand-500">Precios en COP. Las tasas del día aún no están cargadas.</p>}
 
         {/* Buscador */}
         <div className="relative mb-6">
