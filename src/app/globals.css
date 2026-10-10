@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink-950: 12 9 7;
+  --ink-900: 20 15 11;
+  --ink-800: 31 24 18;
+  --ink-700: 46 36 27;
+  --ink-600: 70 56 43;
+  --sand-50: 250 244 233;
+  --sand-200: 232 218 196;
+  --sand-400: 180 163 140;
+  --sand-500: 140 126 107;
+  --gold-300: 240 200 121;
+  --gold-400: 225 179 92;
+  --gold-500: 212 162 76;
+  --gold-600: 176 128 48;
+  --terra-400: 221 110 84;
+  --terra-500: 200 85 61;
+  --terra-600: 168 64 44;
+  color-scheme: dark;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  scroll-padding-top: 8rem;
+}
+
+body {
+  @apply bg-ink-950 text-sand-50 font-sans antialiased;
+  min-height: 100dvh;
+}
+
+.bg-pattern {
+  background-image:
+    radial-gradient(ellipse at top, rgb(var(--ink-950) / 0.2), rgb(var(--ink-950) / 0.92) 70%),
+    url('/pattern.svg');
+  background-size: auto, 96px 96px;
+}
+
+.pattern-faint {
+  position: relative;
+}
+.pattern-faint::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/pattern.svg');
+  background-size: 72px 72px;
+  opacity: 0.06;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+.safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 0.75rem); }
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition
+      active:scale-[.98] disabled:opacity-50 disabled:pointer-events-none select-none;
+  }
+  .btn-primary { @apply btn bg-gold-500 text-ink-950 hover:bg-gold-400; }
+  .btn-terra { @apply btn bg-terra-500 text-sand-50 hover:bg-terra-400; }
+  .btn-ghost { @apply btn bg-ink-800 text-sand-50 hover:bg-ink-700 border border-ink-700; }
+  .btn-danger { @apply btn bg-red-700/90 text-white hover:bg-red-600; }
+  .btn-success { @apply btn bg-emerald-600 text-white hover:bg-emerald-500; }
+  .btn-sm { @apply px-3 py-2 text-xs rounded-lg; }
+
+  .card { @apply rounded-2xl bg-ink-900 border border-ink-700/70; }
+  .input {
+    @apply w-full rounded-xl bg-ink-800 border border-ink-600 px-3.5 py-3 text-[16px] text-sand-50
+      placeholder:text-sand-500 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25;
+  }
+  .label { @apply block text-sm font-medium text-sand-200 mb-1.5; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold; }
+  .h-display { @apply font-display tracking-wide; }
+}
+
+/* Leaflet */
+.leaflet-container { background: #1f1812; font: inherit; border-radius: 1rem; }
+.leaflet-control-attribution { font-size: 9px !important; }
+.pin-marker { background: transparent; border: none; }
+
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  .no-print { display: none !important; }
+}
