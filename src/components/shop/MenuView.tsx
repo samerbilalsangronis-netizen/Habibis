@@ -9,6 +9,7 @@ import Price from './Price';
 import ProductCard, { productSoldOut } from './ProductCard';
 import ProductSheet, { validateSelection } from './ProductSheet';
 import FloatingSocial from './FloatingSocial';
+import Sheet from '@/components/ui/Sheet';
 import { IconBike, IconCart, IconClock, IconPin, IconRepeat, IconSearch, IconStore, IconX } from '@/components/ui/Icons';
 import { isOpenNow, nextOpeningText } from '@/lib/hours';
 import { useHydrated } from '@/lib/hooks';
@@ -32,6 +33,7 @@ export default function MenuView({ data }: { data: MenuData }) {
   const [product, setProduct] = useState<MenuProduct | null>(null);
   const [editLine, setEditLine] = useState<CartLine | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [mine, setMine] = useState(false);
   const barRef = useRef<HTMLDivElement>(null);
   const { lines, setOpen, add } = useCart();
   const recent = useRecent((s) => s.orders);
@@ -157,7 +159,21 @@ export default function MenuView({ data }: { data: MenuData }) {
             <span className="font-display text-xl text-gold-300 truncate">{settings.business_name}</span>
           </Link>
           <div className="ml-auto flex items-center gap-2">
+            {hydrated && recent.length > 0 && (
+              <button
+                onClick={() => setMine(true)}
+                className="hidden sm:inline-flex btn-ghost btn-sm rounded-full"
+                aria-label="Mis pedidos"
+              >
+                🧾 Mis pedidos
+              </button>
+            )}
             <CurrencyToggle disabled={!rateOk} />
+            {hydrated && recent.length > 0 && (
+              <button onClick={() => setMine(true)} className="sm:hidden p-2 rounded-full bg-ink-800 border border-ink-700" aria-label="Mis pedidos">
+                🧾
+              </button>
+            )}
             <button onClick={() => setOpen(true)} className="relative p-2 rounded-full bg-ink-800 border border-ink-700" aria-label="Ver carrito">
               <IconCart />
               {hydrated && count > 0 && (
@@ -253,32 +269,6 @@ export default function MenuView({ data }: { data: MenuData }) {
           )}
           {!rateOk && <p className="mt-2 text-xs text-sand-500">Precios en COP. Las tasas del día aún no están cargadas.</p>}
         </section>
-
-        {/* Pedidos recientes */}
-        {hydrated && recent.length > 0 && (
-          <section className="mb-6">
-            <h2 className="text-sm font-semibold text-sand-400 mb-2">Tus pedidos recientes</h2>
-            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
-              {recent.slice(0, 5).map((r) => (
-                <div key={r.token} className="card min-w-[230px] p-3 flex flex-col gap-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="font-bold text-gold-300">{r.code}</span>
-                    <span className="text-sand-400">{new Date(r.createdAt).toLocaleDateString('es-VE')}</span>
-                  </div>
-                  <p className="text-xs text-sand-200 line-clamp-2">{r.items.map((i) => `${i.quantity}× ${i.name}`).join(', ')}</p>
-                  <div className="flex gap-2 mt-auto">
-                    <Link href={`/pedido/${r.token}`} className="btn-ghost btn-sm flex-1">
-                      Ver estado
-                    </Link>
-                    <button className="btn-primary btn-sm flex-1" onClick={() => repeat(r.token)} disabled={!canOrder}>
-                      <IconRepeat className="w-4 h-4" /> Repetir
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
 
         {/* Buscador */}
         <div className="relative mb-6">
@@ -380,6 +370,36 @@ export default function MenuView({ data }: { data: MenuData }) {
           setProduct(p);
         }}
       />
+
+      <Sheet open={mine} onClose={() => setMine(false)} title="Mis pedidos">
+        <p className="px-5 pt-3 text-xs text-sand-500">Solo se guardan en este teléfono.</p>
+        <ul className="divide-y divide-ink-700/70">
+          {recent.map((r) => (
+            <li key={r.token} className="p-4 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="font-bold text-gold-300">{r.code}</span>
+                <span className="text-sand-400">{new Date(r.createdAt).toLocaleDateString('es-VE')}</span>
+              </div>
+              <p className="text-xs text-sand-200">{r.items.map((i) => `${i.quantity}× ${i.name}`).join(', ')}</p>
+              <div className="flex gap-2">
+                <Link href={`/pedido/${r.token}`} className="btn-ghost btn-sm flex-1">
+                  Ver estado
+                </Link>
+                <button
+                  className="btn-primary btn-sm flex-1"
+                  disabled={!canOrder}
+                  onClick={() => {
+                    setMine(false);
+                    repeat(r.token);
+                  }}
+                >
+                  <IconRepeat className="w-4 h-4" /> Repetir
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Sheet>
 
       {toast && (
         <div className="fixed top-20 inset-x-0 z-50 flex justify-center px-4 animate-fade-in">
