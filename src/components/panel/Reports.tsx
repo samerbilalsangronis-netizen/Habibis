@@ -72,7 +72,8 @@ export default function Reports() {
   }, [tz]);
   const cashStart = useMemo(() => fromInputDate(cashDay, tz), [cashDay, tz]);
   const loadFrom = new Date(Math.min(range.start.getTime(), monthStart.getTime(), cashStart.getTime(), startOfDayTz(new Date(), tz).getTime() - 7 * DAY));
-  const loadTo = new Date(Math.max(range.end.getTime(), Date.now() + DAY));
+  // Fin estable (inicio de hoy + 2 días): usar Date.now() aquí cambiaba en cada render y recargaba sin parar
+  const loadTo = new Date(Math.max(range.end.getTime(), startOfDayTz(new Date(), tz).getTime() + 2 * DAY));
   const loadKey = `${loadFrom.toISOString()}|${loadTo.toISOString()}`;
 
   useEffect(() => {
