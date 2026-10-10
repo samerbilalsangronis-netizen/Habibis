@@ -95,12 +95,17 @@ export default function PanelShell({ children }: { children: React.ReactNode }) 
             </button>
           </div>
         </div>
-        {staff.role !== 'repartidor' && soundOn && soundBlocked && (
-          <button onClick={enableSound} className="w-full bg-terra-500 text-white text-sm font-semibold py-2 animate-pulse2">
-            🔔 Toca aquí para activar el sonido de pedidos nuevos
-          </button>
-        )}
       </header>
+
+      {/* Aviso flotante (no desplaza el contenido al desaparecer) */}
+      {staff.role !== 'repartidor' && soundOn && soundBlocked && (
+        <button
+          onClick={enableSound}
+          className="fixed z-40 left-1/2 -translate-x-1/2 bottom-24 lg:bottom-6 rounded-full bg-terra-500 text-white text-sm font-semibold px-4 py-2.5 shadow-2xl animate-pulse2 whitespace-nowrap"
+        >
+          🔔 Toca para activar el sonido de pedidos
+        </button>
+      )}
 
       <div className="pb-24 lg:pb-8">{children}</div>
 

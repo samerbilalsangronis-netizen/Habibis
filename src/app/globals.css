@@ -39,26 +39,26 @@ body {
   background-size: auto, 96px 96px;
 }
 
-.pattern-faint {
-  position: relative;
-}
-.pattern-faint::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url('/pattern.svg');
-  background-size: 72px 72px;
-  opacity: 0.06;
-  pointer-events: none;
-  border-radius: inherit;
-}
-
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
 
 .safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 0.75rem); }
 
 @layer components {
+  .pattern-faint {
+    position: relative;
+  }
+  .pattern-faint::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/pattern.svg');
+    background-size: 72px 72px;
+    opacity: 0.06;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition
       active:scale-[.98] disabled:opacity-50 disabled:pointer-events-none select-none;

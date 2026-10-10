@@ -150,10 +150,11 @@ export function PanelProvider({
       await alarm.current?.unlock();
       setSoundBlocked(!!alarm.current?.blocked);
     };
-    document.addEventListener('pointerdown', unlock);
+    // Se usa 'click' (no 'pointerdown') para no re-renderizar en medio de un toque
+    document.addEventListener('click', unlock);
     document.addEventListener('keydown', unlock);
     return () => {
-      document.removeEventListener('pointerdown', unlock);
+      document.removeEventListener('click', unlock);
       document.removeEventListener('keydown', unlock);
     };
   }, []);

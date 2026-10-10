@@ -4,10 +4,14 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../env';
 
+/** Next.js 14 cachea fetch() por defecto: los datos del negocio deben leerse siempre frescos. */
+const noStoreFetch: typeof fetch = (input, init) => fetch(input, { ...init, cache: 'no-store' });
+
 /** Cliente con la sesión del usuario (Server Components, Route Handlers). */
 export function supabaseServer(): SupabaseClient {
   const store = cookies();
   return createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    global: { fetch: noStoreFetch },
     cookies: {
       getAll() {
         return store.getAll();
@@ -27,6 +31,7 @@ export function supabaseServer(): SupabaseClient {
 export function supabasePublic(): SupabaseClient {
   return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: { persistSession: false, autoRefreshToken: false },
+    global: { fetch: noStoreFetch },
   });
 }
 
@@ -36,5 +41,6 @@ export function supabaseAdmin(): SupabaseClient {
   if (!key) throw new Error('Falta SUPABASE_SERVICE_ROLE_KEY');
   return createClient(SUPABASE_URL, key, {
     auth: { persistSession: false, autoRefreshToken: false },
+    global: { fetch: noStoreFetch },
   });
 }
