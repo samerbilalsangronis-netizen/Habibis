@@ -9,9 +9,9 @@ await mkdir('public/icons', { recursive: true });
 const panelSvg = Buffer.from(
   logo
     .toString()
-    .replace('fill="#140f0b"', 'fill="#c8553d"')
-    .replace('fill="#c8553d"/>\n  <text', 'fill="#140f0b"/>\n  <text')
-    .replace('</svg>', `<rect x="136" y="410" width="240" height="56" rx="28" fill="#140f0b"/><text x="256" y="449" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#f0c879" letter-spacing="4">PANEL</text></svg>`),
+    .replace('fill="#14201a"', 'fill="#c8553d"')
+    .replace('fill="#c8553d"/>\n  <text', 'fill="#14201a"/>\n  <text')
+    .replace('</svg>', `<rect x="136" y="410" width="240" height="56" rx="28" fill="#14201a"/><text x="256" y="449" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#f0c879" letter-spacing="4">PANEL</text></svg>`),
 );
 
 async function png(src, size, out, { pad = 0, bg = null } = {}) {
@@ -19,7 +19,7 @@ async function png(src, size, out, { pad = 0, bg = null } = {}) {
   let img = sharp(src, { density: 384 }).resize(inner, inner);
   if (pad) {
     img = sharp({
-      create: { width: size, height: size, channels: 4, background: bg ?? { r: 20, g: 15, b: 11, alpha: 1 } },
+      create: { width: size, height: size, channels: 4, background: bg ?? { r: 20, g: 32, b: 26, alpha: 1 } },
     }).composite([{ input: await img.png().toBuffer(), left: pad, top: pad }]);
   }
   await img.png().toFile(out);

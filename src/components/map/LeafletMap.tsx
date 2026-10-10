@@ -18,8 +18,8 @@ function pinIcon(color = '#c8553d', label?: string) {
     iconSize: [36, 46],
     iconAnchor: [18, 44],
     html: `<div style="position:relative;width:36px;height:46px">
-      <svg viewBox="0 0 36 46" width="36" height="46"><path d="M18 45s15-14.6 15-27A15 15 0 0 0 3 18c0 12.4 15 27 15 27Z" fill="${color}" stroke="#0c0907" stroke-width="2"/><circle cx="18" cy="18" r="6.5" fill="#faf4e9"/></svg>
-      ${label ? `<span style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#0c0907;color:#f0c879;font:600 11px system-ui;padding:2px 6px;border-radius:6px">${label}</span>` : ''}
+      <svg viewBox="0 0 36 46" width="36" height="46"><path d="M18 45s15-14.6 15-27A15 15 0 0 0 3 18c0 12.4 15 27 15 27Z" fill="${color}" stroke="#14201a" stroke-width="2"/><circle cx="18" cy="18" r="6.5" fill="#faf4e9"/></svg>
+      ${label ? `<span style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#14201a;color:#f0c879;font:600 11px system-ui;padding:2px 6px;border-radius:6px">${label}</span>` : ''}
     </div>`,
   });
 }

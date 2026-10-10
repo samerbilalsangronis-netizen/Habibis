@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --ink-950: 12 9 7;
-  --ink-900: 20 15 11;
-  --ink-800: 31 24 18;
-  --ink-700: 46 36 27;
-  --ink-600: 70 56 43;
-  --sand-50: 250 244 233;
+  --ink-950: 20 32 26;
+  --ink-900: 28 43 35;
+  --ink-800: 37 56 46;
+  --ink-700: 50 74 60;
+  --ink-600: 78 104 88;
+  --sand-50: 245 236 220;
   --sand-200: 232 218 196;
-  --sand-400: 180 163 140;
-  --sand-500: 140 126 107;
+  --sand-400: 186 178 156;
+  --sand-500: 146 146 124;
   --gold-300: 240 200 121;
   --gold-400: 225 179 92;
   --gold-500: 212 162 76;
@@ -34,7 +34,7 @@ body {
 
 .bg-pattern {
   background-image:
-    radial-gradient(ellipse at top, rgb(var(--ink-950) / 0.2), rgb(var(--ink-950) / 0.92) 70%),
+    radial-gradient(ellipse at top, rgb(var(--ink-950) / 0.72), rgb(var(--ink-950) / 0.95) 70%),
     url('/pattern.svg');
   background-size: auto, 96px 96px;
 }
@@ -81,7 +81,7 @@ body {
 }
 
 /* Leaflet */
-.leaflet-container { background: #1f1812; font: inherit; border-radius: 1rem; }
+.leaflet-container { background: #1c2b23; font: inherit; border-radius: 1rem; }
 .leaflet-control-attribution { font-size: 9px !important; }
 .pin-marker { background: transparent; border: none; }
 

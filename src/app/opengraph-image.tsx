@@ -16,8 +16,8 @@ export default function OgImage() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'radial-gradient(circle at 50% 35%, #2e241b 0%, #0c0907 70%)',
-          color: '#faf4e9',
+          background: 'radial-gradient(circle at 50% 35%, #2b4234 0%, #14201a 70%)',
+          color: '#f5ecdc',
           fontFamily: 'serif',
         }}
       >
@@ -47,7 +47,7 @@ export default function OgImage() {
             padding: '12px 30px',
             borderRadius: 999,
             background: '#d4a24c',
-            color: '#0c0907',
+            color: '#14201a',
             fontFamily: 'sans-serif',
             fontWeight: 700,
           }}

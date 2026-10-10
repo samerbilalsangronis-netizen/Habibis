@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   icons: { apple: '/icons/panel-192.png' },
 };
 
-export const viewport: Viewport = { themeColor: '#140f0b' };
+export const viewport: Viewport = { themeColor: '#14201a' };
 
 export default function PanelRootLayout({ children }: { children: React.ReactNode }) {
   return (
