@@ -499,7 +499,7 @@ function BusinessTab() {
       <section className="card p-4 space-y-3">
         <div className="flex items-center gap-4">
           <label className="relative w-20 h-20 rounded-2xl overflow-hidden bg-ink-800 border-2 border-dashed border-ink-600 grid place-items-center cursor-pointer shrink-0">
-            <img src={f.logo_url || '/logo.svg'} alt="Logo" className="absolute inset-0 w-full h-full object-cover" />
+            <img src={f.logo_url || '/logo-512.webp'} alt="Logo" className="absolute inset-0 w-full h-full object-contain p-1" />
             <span className="absolute inset-x-0 bottom-0 bg-black/60 text-[10px] text-center py-0.5">
               <IconUpload className="w-3 h-3 inline" /> {uploading ? '…' : 'Cambiar'}
             </span>

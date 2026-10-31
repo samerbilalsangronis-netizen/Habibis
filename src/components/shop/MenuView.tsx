@@ -161,7 +161,7 @@ export default function MenuView({ data }: { data: MenuData }) {
       <header className="sticky top-0 z-30 bg-ink-950/85 backdrop-blur-md border-b border-ink-800">
         <div className="max-w-5xl mx-auto flex items-center gap-3 px-4 h-14">
           <Link href="/" className="flex items-center gap-2 min-w-0">
-            <img src={settings.logo_url || '/logo.svg'} alt="" className="w-9 h-9 rounded-xl object-cover" />
+            <img src={settings.logo_url || '/logo-512.webp'} alt="" className="w-10 h-10 object-contain drop-shadow" />
             <span className="font-display text-xl text-gold-300 truncate">{settings.business_name}</span>
           </Link>
           <div className="ml-auto flex items-center gap-2">

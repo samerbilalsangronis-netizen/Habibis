@@ -1,36 +1,35 @@
-// Genera los íconos PNG de las PWA a partir de public/logo.svg.
+// Genera los íconos PNG de las PWA a partir de public/logo.png (logo oficial, fondo transparente).
 // Uso: npm run icons   (vuelve a ejecutarlo si cambias el logo)
 import sharp from 'sharp';
-import { readFile, mkdir } from 'node:fs/promises';
+import { mkdir } from 'node:fs/promises';
 
-const logo = await readFile('public/logo.svg');
+const LOGO = 'public/logo.png';
+const OLIVE = { r: 20, g: 32, b: 26, alpha: 1 };
 await mkdir('public/icons', { recursive: true });
 
-const panelSvg = Buffer.from(
-  logo
-    .toString()
-    .replace('fill="#14201a"', 'fill="#c8553d"')
-    .replace('fill="#c8553d"/>\n  <text', 'fill="#14201a"/>\n  <text')
-    .replace('</svg>', `<rect x="136" y="410" width="240" height="56" rx="28" fill="#14201a"/><text x="256" y="449" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#f0c879" letter-spacing="4">PANEL</text></svg>`),
-);
-
-async function png(src, size, out, { pad = 0, bg = null } = {}) {
-  const inner = size - pad * 2;
-  let img = sharp(src, { density: 384 }).resize(inner, inner);
-  if (pad) {
-    img = sharp({
-      create: { width: size, height: size, channels: 4, background: bg ?? { r: 20, g: 32, b: 26, alpha: 1 } },
-    }).composite([{ input: await img.png().toBuffer(), left: pad, top: pad }]);
+/** Logo centrado sobre fondo sólido. `scale` = fracción del lado que ocupa el logo. */
+async function icon(size, out, { scale = 0.92, bg = OLIVE, panel = false } = {}) {
+  const inner = Math.round(size * scale);
+  const logo = await sharp(LOGO).resize(inner, inner, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
+  const top = Math.round((size - inner) / 2 - (panel ? size * 0.05 : 0));
+  const layers = [{ input: logo, left: Math.round((size - inner) / 2), top }];
+  if (panel) {
+    const w = Math.round(size * 0.5);
+    const h = Math.round(size * 0.13);
+    const tag = Buffer.from(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect width="${w}" height="${h}" rx="${h / 2}" fill="#c8553d"/><text x="50%" y="70%" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="${Math.round(h * 0.55)}" letter-spacing="${Math.round(h * 0.08)}" fill="#fff">PANEL</text></svg>`,
+    );
+    layers.push({ input: tag, left: Math.round((size - w) / 2), top: Math.round(size * 0.82) });
   }
-  await img.png().toFile(out);
+  await sharp({ create: { width: size, height: size, channels: 4, background: bg } }).composite(layers).png().toFile(out);
   console.log('✓', out);
 }
 
-await png(logo, 192, 'public/icons/icon-192.png');
-await png(logo, 512, 'public/icons/icon-512.png');
-await png(logo, 512, 'public/icons/maskable-512.png', { pad: 56 });
-await png(logo, 180, 'public/icons/apple-touch-icon.png');
-await png(logo, 72, 'public/icons/badge-72.png');
-await png(panelSvg, 192, 'public/icons/panel-192.png');
-await png(panelSvg, 512, 'public/icons/panel-512.png');
-await png(panelSvg, 512, 'public/icons/panel-maskable-512.png', { pad: 56, bg: { r: 200, g: 85, b: 61, alpha: 1 } });
+await icon(192, 'public/icons/icon-192.png');
+await icon(512, 'public/icons/icon-512.png');
+await icon(512, 'public/icons/maskable-512.png', { scale: 0.74 });
+await icon(180, 'public/icons/apple-touch-icon.png', { scale: 0.88 });
+await icon(72, 'public/icons/badge-72.png', { scale: 1, bg: { r: 0, g: 0, b: 0, alpha: 0 } });
+await icon(192, 'public/icons/panel-192.png', { scale: 0.8, panel: true });
+await icon(512, 'public/icons/panel-512.png', { scale: 0.8, panel: true });
+await icon(512, 'public/icons/panel-maskable-512.png', { scale: 0.62, panel: true });

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: 'Shawarmas, falafel, cremas árabes y más. Pide en línea con delivery o retiro en el local.',
   applicationName: 'Habibis',
   icons: {
-    icon: [{ url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' }, { url: '/logo.svg', type: 'image/svg+xml' }],
+    icon: [{ url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' }],
     apple: '/icons/apple-touch-icon.png',
   },
 };

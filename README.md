@@ -153,7 +153,7 @@ public/                Logo, íconos PWA, service worker (sw.js), manifiestos
 
 ## Cambiar logo y colores
 
-- **Logo**: Panel → Ajustes → Negocio → toca el logo y sube el tuyo (se usa en la web). Para los íconos de la app instalada, reemplaza `public/logo.svg` (o pon tu PNG cuadrado) y ejecuta `npm run icons`.
+- **Logo**: Panel → Ajustes → Negocio → toca el logo y sube el tuyo (se usa en la web). El logo por defecto es `public/logo.png` (PNG cuadrado con fondo transparente) y su versión liviana `public/logo-512.webp`; si lo reemplazas, ejecuta `npm run icons` para regenerar los íconos de la app.
 - **Colores**: están en `src/app/globals.css` (variables `--ink-*` fondo, `--gold-*` dorado, `--terra-*` terracota).
 
 ## Comandos
@@ -163,5 +163,5 @@ public/                Logo, íconos PWA, service worker (sw.js), manifiestos
 | `npm run dev` | Desarrollo local |
 | `npm run build` | Compilar para producción |
 | `npm run vapid` | Generar claves de notificaciones |
-| `npm run icons` | Regenerar íconos PWA desde `public/logo.svg` |
+| `npm run icons` | Regenerar íconos PWA desde `public/logo.png` |
 | `npm run create-admin` | Crear/promover un administrador |

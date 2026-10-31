@@ -1,5 +1,5 @@
 /* Habibis service worker: caché básica para carga rápida + notificaciones push. */
-const VERSION = 'habibis-v1';
+const VERSION = 'habibis-v2';
 const STATIC_CACHE = `${VERSION}-static`;
 const PAGES_CACHE = `${VERSION}-pages`;
 const OFFLINE_URL = '/offline.html';
@@ -8,7 +8,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(STATIC_CACHE)
-      .then((c) => c.addAll([OFFLINE_URL, '/logo.svg', '/pattern.svg', '/icons/icon-192.png']))
+      .then((c) => c.addAll([OFFLINE_URL, '/logo-512.webp', '/pattern.svg', '/icons/icon-192.png']))
       .then(() => self.skipWaiting()),
   );
 });

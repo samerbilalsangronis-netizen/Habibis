@@ -35,7 +35,7 @@ export default function Hero({
   favorites: MenuProduct[];
   onOpenProduct: (p: MenuProduct) => void;
 }) {
-  const logo = settings.logo_url || '/logo.svg';
+  const logo = settings.logo_url || '/logo-512.webp';
 
   return (
     <section className="pt-5 pb-8">
@@ -46,22 +46,17 @@ export default function Hero({
         <div className="absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-terra-500/15 blur-3xl" aria-hidden />
 
         <div className="relative grid md:grid-cols-[1.15fr,1fr] items-center gap-6 md:gap-4 p-6 sm:p-10">
-          {/* Arco con el logo */}
+          {/* Logo oficial */}
           <div className="order-first md:order-last flex justify-center">
             <div className="relative">
-              <div className="relative w-48 h-60 sm:w-60 sm:h-72 rounded-t-full rounded-b-3xl p-[3px] bg-gradient-to-b from-gold-300 via-gold-500 to-gold-600/40 shadow-glow">
-                <div className="relative h-full w-full rounded-t-full rounded-b-[1.35rem] bg-ink-950 overflow-hidden">
-                  <div className="absolute inset-0 opacity-[0.12] bg-[url('/pattern.svg')] bg-[length:48px_48px]" aria-hidden />
-                  <div className="absolute inset-3 rounded-t-full rounded-b-2xl border border-gold-500/30" aria-hidden />
-                  <div className="relative h-full flex flex-col items-center justify-center gap-3 pt-6">
-                    <img src={logo} alt={settings.business_name} className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover drop-shadow-2xl" />
-                    <span className="font-display text-2xl sm:text-3xl text-gold-300 tracking-wide">{settings.business_name}</span>
-                    <span className="flex items-center gap-2 text-gold-500/70 text-xs" aria-hidden>
-                      <span className="w-6 h-px bg-gold-500/50" />✦<span className="w-6 h-px bg-gold-500/50" />
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <div className="absolute inset-6 rounded-full bg-gold-500/25 blur-3xl" aria-hidden />
+              <img
+                src={logo}
+                alt={settings.business_name}
+                width={512}
+                height={512}
+                className="relative w-60 h-60 sm:w-72 sm:h-72 lg:w-80 lg:h-80 object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.55)]"
+              />
             </div>
           </div>
 

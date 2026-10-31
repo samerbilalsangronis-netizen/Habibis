@@ -82,7 +82,7 @@ Lo que asumí o decidí sin preguntar. Todo se puede cambiar.
 ## Diseño
 
 - Tema oscuro **verde oliva** (`#14201A`) con dorado y terracota, y patrón geométrico árabe (estrella de 8 puntas) muy suave. Tipografías **Reem Kufi** (títulos) y **Cairo** (texto).
-- **Logo provisional** (`public/logo.svg`): monograma "H" sobre una estrella de 8 puntas. Pendiente el logo real.
+- **Logo oficial** (`public/logo.png`, recortado del original para quitar el fondo de tela negra y dejarlo transparente; `public/logo-512.webp` es la versión liviana que usa la web). Los íconos de la app se generan con `npm run icons`.
 - Si un producto no tiene foto, se muestra un mosaico con su inicial.
 - Imagen para compartir (Open Graph) generada automáticamente (`src/app/opengraph-image.tsx`).
 
@@ -91,6 +91,5 @@ Lo que asumí o decidí sin preguntar. Todo se puede cambiar.
 - Ciudad, dirección y ubicación del local (Ajustes → Negocio).
 - WhatsApp (`584120000000`), Instagram, datos de Binance, pago móvil y transferencia: **son de ejemplo**.
 - Menú real con precios y fotos (el seed trae un menú de ejemplo).
-- Logo y colores definitivos.
 - Dominio (por ahora el de Vercel).
 - Contraseña del admin de ejemplo.
