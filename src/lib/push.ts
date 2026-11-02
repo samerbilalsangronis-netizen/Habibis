@@ -2,15 +2,25 @@ import 'server-only';
 import webpush from 'web-push';
 import { supabaseAdmin } from './supabase/server';
 
+/** Limpia espacios, comillas y saltos de línea que suelen colarse al pegar en Vercel. */
+const clean = (v: string | undefined) => (v ?? '').trim().replace(/^["']|["']$/g, '').replace(/\s+/g, '');
+
 let configured = false;
-function configure(): boolean {
-  if (configured) return true;
-  const pub = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-  const priv = process.env.VAPID_PRIVATE_KEY;
-  if (!pub || !priv) return false;
-  webpush.setVapidDetails(process.env.VAPID_SUBJECT || 'mailto:admin@habibis.app', pub, priv);
+/** Devuelve null si quedó listo, o el motivo por el que no se puede enviar. */
+function configure(): string | null {
+  if (configured) return null;
+  const pub = clean(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
+  const priv = clean(process.env.VAPID_PRIVATE_KEY);
+  if (!pub || !priv) return 'Faltan las claves VAPID en las variables de entorno';
+  let subject = (process.env.VAPID_SUBJECT ?? '').trim().replace(/^["']|["']$/g, '').replace(/\s+/g, '');
+  if (subject && !/^(mailto:|https:\/\/)/.test(subject)) subject = subject.includes('@') ? `mailto:${subject}` : `https://${subject}`;
+  try {
+    webpush.setVapidDetails(subject || 'mailto:admin@habibis.app', pub, priv);
+  } catch (e) {
+    return `Claves VAPID inválidas: ${(e as Error).message}`;
+  }
   configured = true;
-  return true;
+  return null;
 }
 
 export interface PushPayload {
@@ -27,7 +37,11 @@ export interface PushPayload {
  * Borra automáticamente las suscripciones vencidas.
  */
 export async function sendPush(payload: PushPayload, opts: { roles?: string[]; userIds?: string[] } = {}) {
-  if (!configure()) return { sent: 0, skipped: 'sin claves VAPID' };
+  const problem = configure();
+  if (problem) {
+    console.error('[push]', problem);
+    return { sent: 0, error: problem };
+  }
   const admin = supabaseAdmin();
 
   let userIds = opts.userIds;
@@ -39,10 +53,11 @@ export async function sendPush(payload: PushPayload, opts: { roles?: string[]; u
       .in('role', opts.roles ?? ['admin', 'operador']);
     userIds = (staff ?? []).map((s) => s.user_id);
   }
-  if (!userIds.length) return { sent: 0 };
+  if (!userIds.length) return { sent: 0, error: 'No hay personal activo para avisar' };
 
   const { data: subs } = await admin.from('push_subscriptions').select('*').in('user_id', userIds);
   let sent = 0;
+  const failures: string[] = [];
   await Promise.all(
     (subs ?? []).map(async (s) => {
       try {
@@ -57,10 +72,12 @@ export async function sendPush(payload: PushPayload, opts: { roles?: string[]; u
         if (code === 404 || code === 410) {
           await admin.from('push_subscriptions').delete().eq('id', s.id);
         } else {
-          console.error('[push] error', code, (err as Error).message);
+          const body = (err as { body?: string }).body;
+          console.error('[push] error', code, (err as Error).message, body);
+          failures.push(`${code ?? ''} ${body || (err as Error).message}`.trim());
         }
       }
     }),
   );
-  return { sent };
+  return { sent, devices: (subs ?? []).length, ...(failures.length ? { error: failures.join(' · ').slice(0, 300) } : {}) };
 }

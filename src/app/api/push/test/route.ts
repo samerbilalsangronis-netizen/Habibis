@@ -8,9 +8,14 @@ export const runtime = 'nodejs';
 export async function POST() {
   const staff = await getStaff();
   if (!staff) return json({ error: 'No autorizado' }, 401);
-  const r = await sendPush(
-    { title: '🔔 Prueba de Habibis', body: '¡Las notificaciones funcionan en este dispositivo!', url: '/panel', tag: 'prueba' },
-    { userIds: [staff.profile.user_id] },
-  );
-  return json(r);
+  try {
+    const r = await sendPush(
+      { title: '🔔 Prueba de Habibis', body: '¡Las notificaciones funcionan en este dispositivo!', url: '/panel', tag: 'prueba' },
+      { userIds: [staff.profile.user_id] },
+    );
+    return json(r);
+  } catch (e) {
+    console.error('[push/test]', e);
+    return json({ sent: 0, error: (e as Error).message }, 500);
+  }
 }

@@ -610,7 +610,11 @@ function NotificationsTab() {
     setMsg(null);
     const res = await fetch('/api/push/test', { method: 'POST' });
     const out = await res.json().catch(() => ({}));
-    setMsg(res.ok ? (out.sent ? 'Enviada. Debería llegarte en unos segundos.' : `No se envió (${out.skipped || 'sin dispositivos'})`) : out.error);
+    setMsg(
+      res.ok && out.sent
+        ? `Enviada a ${out.sent} dispositivo(s). Debería llegarte en unos segundos.${out.error ? ` (Falló en otros: ${out.error})` : ''}`
+        : `No se envió: ${out.error || 'este usuario no tiene dispositivos activados'}`,
+    );
   };
 
   return (
