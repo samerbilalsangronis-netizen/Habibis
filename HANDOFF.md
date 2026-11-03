@@ -433,6 +433,7 @@ modo "por zonas" con polígonos en mapa, fotos con IA, reportes de márgenes.
 | `cd8cfb7` | Fix: Reportes recargaba sin parar (parpadeo) |
 | `0530d4d` | Logo oficial en portada, encabezado, íconos PWA y OG |
 | `1ed6b94` | Fix: push fallaba con `VAPID_SUBJECT` sin `mailto:`; muestra el motivo si falla |
+| `1b5872b` | HANDOFF.md, AGENTS.md (lo lee Codex) y CLAUDE.md (lo lee Claude Code) |
 
 Pruebas de punta a punta realizadas (Playwright + Supabase local en Docker): pedido delivery con Binance y
 comprobante, pedido retiro en efectivo, cambios de estado vistos por el cliente en 50–120 ms, alarma y
